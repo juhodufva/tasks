@@ -12,6 +12,7 @@ class TodoListManager extends ChangeNotifier {
   TodoListManager() {}
 
   Future<void> init() async {
+    await dbHelper.init();
     loadFromDb();
   }
 
@@ -36,10 +37,16 @@ class TodoListManager extends ChangeNotifier {
   }
 
   void loadFromDb() async {
+    log('todolistManagerLoad');
     final list = await dbHelper.queryAllRows();
     for (TodoItem item in list) {
       _items.add(item);
     }
+    notifyListeners();
+  }
+
+  void deleteItem(TodoItem item) {
+    _items.remove(item);
     notifyListeners();
   }
 }

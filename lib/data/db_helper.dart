@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,12 +23,14 @@ class DatabaseHelper {
   Future<void> init() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
-
+    log('dbhelper_init');
     _db = await openDatabase(
       path,
       version: _databaseVersion,
       onCreate: _onCreate,
     );
+    log(_db.isOpen.toString());
+    log(_db.toString());
   }
 
   // SQL code to create the database table
@@ -54,6 +58,7 @@ class DatabaseHelper {
   // All of the rows are returned as a list of maps, where each map is
   // a key-value list of columns.
   Future<List<TodoItem>> queryAllRows() async {
+    log(_db.isOpen.toString());
     final List<Map<String, dynamic>> maps = await _db.query(table);
 
     return List.generate(maps.length, (i) {
@@ -84,6 +89,13 @@ class DatabaseHelper {
     );
   }
 
+  Future<int> deleteTodoItem(int id) async {
+    final db = await _db.database;
+    return await _db.delete(table, where: "$columnId = ?", whereArgs: [id]);
+  }
+
   Future<void> deleteDatabase(String path) =>
       databaseFactory.deleteDatabase(path);
+
+  queryRowCount() {}
 }
