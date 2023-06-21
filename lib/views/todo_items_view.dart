@@ -3,9 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/models/todo_list_manager.dart';
-
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import '../models/todo_item.dart';
 import 'input_task_view.dart';
+import 'dart:async';
 
 class TodoItemsListView extends StatelessWidget {
   TodoItemsListView({
@@ -14,17 +16,21 @@ class TodoItemsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TodoItem> itemList = [];
+    List<TodoItem> itemList = [
+      TodoItem(
+        title: 'Ensimmäinen',
+        description: 'Tehtävän selitys',
+        date: DateTime.parse('2023-03-23'),
+        done: false,
+      ),
+      TodoItem(
+        title: 'Toinen',
+        description: 'Tehtävän selitys',
+        date: DateTime.parse('2023-03-23'),
+        done: false,
+      ),
+    ];
 
-    Widget todoItemsBuilder = Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildTodoCard('Ensimmäinen', 'Tehtävän selitys',
-            DateTime.parse('2023-03-23'), false),
-        _buildTodoCard(
-            'Toinen', 'Tehtävän selitys', DateTime.parse('2023-03-23'), false),
-      ],
-    );
     return Consumer<TodoListManager>(builder: (context, listManager, child) {
       itemList.forEach((item) {
         listManager.add(item);
@@ -58,10 +64,11 @@ class TodoItemsListView extends StatelessWidget {
           itemCount: itemList.length,
           itemBuilder: (BuildContext ctxt, int index) {
             return _buildTodoCard(
-                listManager.items[index].title,
-                listManager.items[index].description,
-                listManager.items[index].date,
-                listManager.items[index].done);
+              listManager.items[index].title,
+              listManager.items[index].description,
+              listManager.items[index].date,
+              listManager.items[index].done,
+            );
           },
         ),
       );

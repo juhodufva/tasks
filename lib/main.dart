@@ -16,6 +16,7 @@ Future<void> main() async {
       create: (context) {
         var model = TodoListManager();
         model.init();
+        return model;
       },
       child: const MyApp(),
     ),

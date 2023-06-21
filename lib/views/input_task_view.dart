@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:tasks/models/todo_item.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:async';
+import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
 
 class InputTaskView extends StatefulWidget {
   const InputTaskView({super.key});
@@ -31,7 +35,7 @@ class InputStateView extends State<InputTaskView> {
                     decoration: const InputDecoration(
                       filled: true,
                       hintText: 'Tehtävän nimi',
-                      labelText: 'Nimi',
+                      labelText: 'Tehtävän nimi',
                     ),
                     onChanged: (value) {
                       title = value;
@@ -51,8 +55,6 @@ class InputStateView extends State<InputTaskView> {
                       });
                     },
                   ),
-                  Text('Brushed Teeth',
-                      style: Theme.of(context).textTheme.titleMedium),
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Tehtävän kuvaus',
